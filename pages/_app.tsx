@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import MainNav from "../components/layout/MainNav";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
+import { useRouter } from "next/router";
 
 // const theme = createTheme({
 //   palette: {
@@ -20,9 +21,14 @@ const theme = createTheme({
   },
 });
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const showHeader = router.pathname === '/pay/[id]' ? false : true;
+
+  console.log(router);
   return (
     <ThemeProvider theme={theme}>
-      <MainNav mainPage={<Component {...pageProps} />} />
+      {showHeader ? <MainNav mainPage={<Component {...pageProps} />} /> : <Component {...pageProps} />}
+
     </ThemeProvider>
   );
 }

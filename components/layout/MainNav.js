@@ -1,5 +1,6 @@
 import * as React from "react";
-import Link from "next/link"
+import Link from "next/link";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -34,7 +35,10 @@ export default function MainNav(props) {
           <Typography variant="h6" noWrap component="div">
             Octopay
           </Typography>
+          <Image src="/public/vercel.svg" width={30} height={30}/>
+
         </Toolbar>
+        
       </AppBar>
       <Drawer
         sx={{
@@ -52,14 +56,13 @@ export default function MainNav(props) {
         <Divider />
         <List>
           {navLinks.map((nav, index) => (
-                    <Link href={nav.link}>
-
-            <ListItem button key={nav.text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={nav.text} />
-            </ListItem>
+            <Link href={nav.link}>
+              <ListItem button key={nav.text}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={nav.text} />
+              </ListItem>
             </Link>
           ))}
         </List>
