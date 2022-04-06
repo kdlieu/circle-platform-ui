@@ -1,0 +1,12 @@
+[
+  {
+    "id": 2342342342,
+    "clientName": "ACME Corporation",
+    "invoiceDate": "04/01/2022"
+  },
+  {
+    "id": 2342322332,
+    "clientName": "ACME Corporation",
+    "invoiceDate": "04/05/2022"
+  }
+]
