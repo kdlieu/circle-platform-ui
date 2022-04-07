@@ -13,6 +13,7 @@ import {
   Select,
   Snackbar,
 } from "@mui/material";
+import axios from "axios";
 let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
 
 export default function InvoiceForm() {
@@ -51,11 +52,18 @@ export default function InvoiceForm() {
   const [invoice, setInvoice] = useState(emptyInvoice());
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log(data);
-    setClientList(data);
-  }, []);
+  // useEffect(() => {
+  //   console.log(data);
+  //   setClientList(data);
+  // }, []);
 
+  useEffect(() => {
+    axios.get('http://localhost:8000/client/all').then(({data}) => {
+      setClientList(data)
+      console.log(data);
+    })
+
+  }, []);
   const onAddLineItem = (): void => {
     const newInvoice = {
       ...invoice,

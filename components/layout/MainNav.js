@@ -34,7 +34,7 @@ export default function MainNav(props) {
       >
         <Toolbar>
           <Typography variant="h6" noWrap component="div">
-            Octopay
+            CircleBusiness
           </Typography>
           <Image src="/public/vercel.svg" width={30} height={30}/>
 

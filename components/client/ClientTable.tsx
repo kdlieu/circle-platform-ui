@@ -14,9 +14,15 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import NumberFormat from "react-number-format";
 let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
-import fs from 'fs';
+let states = require("/Users/khanglieu/Documents/circle-business-platform/static/states.json"); //(with path)
+import fs from "fs";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import axios from "axios";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 const style = {
   position: "absolute",
@@ -31,7 +37,7 @@ const style = {
 };
 export default function ClientTable() {
   const [clientData, setClientData] = useState([]);
-  const [newClient, setNewClient]= useState({});
+  const [newClient, setNewClient] = useState({});
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -45,17 +51,33 @@ export default function ClientTable() {
     setSnackOpen(false);
   };
   useEffect(() => {
-    setClientData(data);
-    console.log(data);
-  }, []);
+    axios.get("http://localhost:8000/client/all").then(({ data }) => {
+      setClientData(data);
+      console.log(data);
+    });
+  }, [open]);
 
+  const handleStateChange = (event) => {
+    setNewClient({
+      ...newClient,
+      state: event.target.value,
+    });
+  };
   const onAddClient = () => {
     // TO-DO: POST call add client
     // TO-DO: Validation
+    console.log(newClient);
+    axios
+      .post("http://localhost:8000/client/create", {
+        ...newClient,
+        client_id: 0,
+      })
+      .then((res) => {
+        handleClose();
+        setSnackOpen(true);
+      });
     handleClose();
-    setSnackOpen(true);
-
-  }
+  };
   return (
     <Box px={4} py={4} height={400}>
       <TableContainer>
@@ -117,13 +139,100 @@ export default function ClientTable() {
               <TextField
                 fullWidth
                 id="outlined-basic"
-                label="Address"
+                label="Address 1"
                 variant="standard"
                 onChange={(e: any) =>
                   setNewClient({
                     ...newClient,
-                    address: e.target.value,
+                    address_1: e.target.value,
                   })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Address 2"
+                variant="standard"
+                onChange={(e: any) =>
+                  setNewClient({
+                    ...newClient,
+                    address_2: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="City"
+                variant="standard"
+                onChange={(e: any) =>
+                  setNewClient({
+                    ...newClient,
+                    city: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+            {/* <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="State"
+                variant="standard"
+                onChange={(e: any) =>
+                  setNewClient({
+                    ...newClient,
+                    state: e.target.value,
+                  })
+                }
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel>State</InputLabel>
+                <Select
+                  variant="standard"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={newClient.state}
+                  label="State"
+                  onChange={handleStateChange}
+                >
+                  {states.map((state) => (
+                    <MenuItem value={state}>{state}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            {/* <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Zipcode"
+                variant="standard"
+                onChange={(e: any) =>
+                  setNewClient({
+                    ...newClient,
+                    zipcode: e.target.value,
+                  })
+                }
+              />
+            </Grid> */}
+            <Grid item xs={12}>
+              <NumberFormat
+                variant="standard"
+                id="zipcode"
+                label="Zipcode"
+                fullWidth
+                value={newClient.zipcode}
+                customInput={TextField}
+                format="#####"
+                onChange={(e: any) =>
+                  setNewClient({ ...newClient, zipcode: e.target.value })
                 }
               />
             </Grid>
@@ -136,7 +245,9 @@ export default function ClientTable() {
                 value={newClient.phone}
                 customInput={TextField}
                 format="(###)-###-####"
-                onChange={(e: any) => setNewClient({ ...newClient, phone: e.target.value })}
+                onChange={(e: any) =>
+                  setNewClient({ ...newClient, phone: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -148,13 +259,15 @@ export default function ClientTable() {
                 onChange={(e: any) =>
                   setNewClient({
                     ...newClient,
-                    email: e.target.value,
+                    client_email: e.target.value,
                   })
                 }
               />
             </Grid>
             <Grid item xs={12}>
-                <Button fullWidth variant="contained" onClick={onAddClient}>Add Client</Button>
+              <Button fullWidth variant="contained" onClick={onAddClient}>
+                Add Client
+              </Button>
             </Grid>
           </Grid>
         </Box>
@@ -163,9 +276,13 @@ export default function ClientTable() {
         open={snackOpen}
         autoHideDuration={6000}
         onClose={handleSnackClose}
-        anchorOrigin={{ vertical:"bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleSnackClose} severity="success" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleSnackClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Client Created Successfully
         </Alert>
       </Snackbar>
