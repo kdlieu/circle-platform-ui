@@ -3,8 +3,17 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
-import { useState } from "react";
-import { Alert, Box, Snackbar } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Alert,
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+} from "@mui/material";
+let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
 
 export default function InvoiceForm() {
   interface InvoiceData {
@@ -37,8 +46,15 @@ export default function InvoiceForm() {
     lineItems: [],
   });
 
+  const [clientList, setClientList] = useState([]);
+  const [selectedClient, setSelectedClient] = useState({});
   const [invoice, setInvoice] = useState(emptyInvoice());
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    console.log(data);
+    setClientList(data);
+  }, []);
 
   const onAddLineItem = (): void => {
     const newInvoice = {
@@ -76,7 +92,9 @@ export default function InvoiceForm() {
 
     setOpen(false);
   };
-
+  const handleClientChange = (event) => {
+    setSelectedClient(event.target.value);
+  };
   const onSave = () => {
     setOpen(true);
     console.log(invoice);
@@ -86,83 +104,70 @@ export default function InvoiceForm() {
   return (
     <Box px={4} py={2}>
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={8}>
-          <TextField
-            fullWidth
-            id="purchaserName"
-            label="Purchaser"
-            variant="outlined"
-            value={invoice.purchaserName}
-            onChange={(e) =>
-              setInvoice({ ...invoice, purchaserName: e.target.value })
-            }
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <TextField
-            fullWidth
-            id="email"
-            label="Email"
-            variant="outlined"
-            value={invoice.purchaserEmail}
-            onChange={(e) =>
-              setInvoice({ ...invoice, purchaserEmail: e.target.value })
-            }
-          />
-        </Grid>
         <>
-              <Grid item xs={1}>
-                <Typography
-                  variant="button"
-                  style={{ textAlign: "center" }}
-                  component="div"
-                >
-                  #
-                </Typography>
-              </Grid>
-              <Grid item xs={5}>
-              <Typography
-                  variant="button"
-                  style={{ textAlign: "center" }}
-                  component="div"
-                >
-                  Item
-                </Typography>
-              </Grid>
-              <Grid item xs={2}>
-              <Typography
-                  variant="button"
-                  style={{ textAlign: "center" }}
-                  component="div"
-                >
-                  Quantity
-                </Typography>
-
-              </Grid>
-              <Grid item xs={2}>
-              <Typography
-                  variant="button"
-                  style={{ textAlign: "center" }}
-                  component="div"
-                >
-                  Rate
-                </Typography>
-
-              </Grid>
-              <Grid item xs={1}>
-              <Typography
-                  variant="button"
-                  style={{ textAlign: "center" }}
-                  component="div"
-                >
-                  Total
-                </Typography>
-
-              </Grid>
-              <Grid item xs={1}>
-
-              </Grid>
-            </>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Client</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedClient}
+                label="Client"
+                onChange={handleClientChange}
+              >
+                {clientList.map((client) => (
+                  <MenuItem value={client}>{client.name} {client.email}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={1}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              #
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              Item
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              Quantity
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              Rate
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              Total
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </>
         {invoice.lineItems.map((lineItem, index) => {
           return (
             <>
@@ -231,6 +236,34 @@ export default function InvoiceForm() {
             </>
           );
         })}
+                  <Grid item xs={1}>
+
+          </Grid>
+          <Grid item xs={5}>
+
+          </Grid>
+          <Grid item xs={2}>
+
+          </Grid>
+          <Grid item xs={2}>
+          <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              Subtotal
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <Typography
+              variant="button"
+              style={{ textAlign: "center" }}
+              component="div"
+            >
+              $10.00
+            </Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
         <Grid item xs={12}>
           <Button fullWidth variant="outlined" onClick={onAddLineItem}>
             Add Line Item
@@ -246,7 +279,7 @@ export default function InvoiceForm() {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        anchorOrigin={{ vertical:"bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Save Successful

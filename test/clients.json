@@ -1,0 +1,14 @@
+[
+  {
+    "name": "ACME",
+    "address": "123 Main Street, SUITE 101, Fairfax, VA, 20120",
+    "phone": "555-555-5555",
+    "email": "me@acme.org"
+  },
+  {
+    "name": "ACME",
+    "address": "1234 Main Street, SUITE 101, Fairfax, VA, 20120",
+    "phone": "555-555-5555",
+    "email": "me@acme.org"
+  }
+]

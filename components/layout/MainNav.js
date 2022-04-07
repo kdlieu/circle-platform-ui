@@ -21,6 +21,7 @@ const drawerWidth = 240;
 const navLinks = [
   { text: "Create Invoice", link: "/invoice" },
   { text: "View All Invoices", link: "/invoices" },
+  { text: "Client List", link: "/clients"}
 ];
 
 export default function MainNav(props) {
