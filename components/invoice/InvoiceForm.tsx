@@ -72,6 +72,9 @@ export default function InvoiceForm() {
     setInvoice(newInvoice);
   };
 
+  const toDollars = (x) => {
+    return Number.parseFloat(x).toFixed(2)
+  };
   const handleLineItemChange = (
     event: any,
     key: LineItem["key"],
@@ -81,7 +84,8 @@ export default function InvoiceForm() {
     let lineItems = data.lineItems as any;
     let index = lineItems.findIndex((obj: { key: number }) => obj.key === key);
     lineItems[index][field] = event?.target.value;
-    // setInvoice({...invoice, lineItems: lineItems});
+    lineItems[index]['total'] = toDollars(lineItems[index]['quantity']*lineItems[index]['rate']);
+    setInvoice({...invoice, lineItems: lineItems});
   };
 
   const deleteLineItem = (key: number) => {
@@ -147,7 +151,7 @@ export default function InvoiceForm() {
               Item
             </Typography>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
             <Typography
               variant="button"
               style={{ textAlign: "center" }}
@@ -165,7 +169,7 @@ export default function InvoiceForm() {
               Rate
             </Typography>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <Typography
               variant="button"
               style={{ textAlign: "center" }}
@@ -200,7 +204,7 @@ export default function InvoiceForm() {
                   }
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={1}>
                 {" "}
                 <TextField
                   fullWidth
@@ -219,21 +223,24 @@ export default function InvoiceForm() {
                   id="outlined-basic"
                   label="Rate"
                   variant="outlined"
+                  value={lineItem.rate}
                   onChange={(e) =>
                     handleLineItemChange(e, lineItem.key, "rate")
                   }
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 {" "}
                 <TextField
                   fullWidth
                   id="outlined-basic"
                   label="Total"
                   variant="outlined"
-                  onChange={(e) =>
-                    handleLineItemChange(e, lineItem.key, "total")
-                  }
+                  disabled
+                  value={lineItem.total}
+                  // onChange={(e) =>
+                  //   handleLineItemChange(e, lineItem.key, "total")
+                  // }
                 />
               </Grid>
               <Grid item xs={1}>
@@ -250,7 +257,7 @@ export default function InvoiceForm() {
           <Grid item xs={5}>
 
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
 
           </Grid>
           <Grid item xs={2}>
@@ -262,13 +269,13 @@ export default function InvoiceForm() {
               Subtotal
             </Typography>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <Typography
               variant="button"
               style={{ textAlign: "center" }}
               component="div"
             >
-              $10.00
+              {toDollars(invoice.lineItems.map(item => item.total).reduce((prev, curr) => prev + curr, 0))}
             </Typography>
           </Grid>
           <Grid item xs={1}></Grid>
