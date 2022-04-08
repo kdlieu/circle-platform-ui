@@ -1,3 +1,4 @@
+import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ClientTable from "../components/client/ClientTable";
@@ -5,17 +6,19 @@ import ClientTable from "../components/client/ClientTable";
 function Clients() {
     return (
         <div>
-            <Paper>
+            {/* <Paper>
             <Typography
-                  variant="h4"
-                  style={{ textAlign: "center" }}
+                  variant="h5"
+                  style={{ textAlign: "left" }}
                   component="div"
-                  py={1}
+                  py={2}
+                  px={4}
                 >
                     Client List
                 </Typography>
+                <Divider/> */}
           <ClientTable/>
-          </Paper>
+          {/* </Paper> */}
         </div>
     );
   }

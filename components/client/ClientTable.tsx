@@ -23,6 +23,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
 
 const style = {
   position: "absolute",
@@ -79,105 +80,161 @@ export default function ClientTable() {
     handleClose();
   };
   return (
-    <Box px={4} py={4} height={400}>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Address</TableCell>
-              <TableCell align="right">Phone</TableCell>
-              <TableCell align="right">Email</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {clientData.map((row, index) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {index}
-                </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.address}</TableCell>
-                <TableCell align="right">{row.phone}</TableCell>
-                <TableCell align="right">{row.email}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Button onClick={handleOpen}>Add Client</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            New Client
+    <Paper>
+      <Grid container alignItems="center">
+        <Grid item xs={6}>
+          <Typography
+            variant="h5"
+            style={{ textAlign: "left" }}
+            component="div"
+            py={2}
+            px={4}
+          >
+            Client List
           </Typography>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Name"
-                variant="standard"
-                onChange={(e: any) =>
-                  setNewClient({
-                    ...newClient,
-                    name: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Address 1"
-                variant="standard"
-                onChange={(e: any) =>
-                  setNewClient({
-                    ...newClient,
-                    address_1: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Address 2"
-                variant="standard"
-                onChange={(e: any) =>
-                  setNewClient({
-                    ...newClient,
-                    address_2: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="City"
-                variant="standard"
-                onChange={(e: any) =>
-                  setNewClient({
-                    ...newClient,
-                    city: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            {/* <Grid item xs={12}>
+        </Grid>
+        <Grid item xs={4}>
+        </Grid>
+
+        <Grid item xs={2}>
+        <Button onClick={handleOpen} variant="contained">Add Client</Button>
+
+        </Grid>
+      </Grid>
+
+      <Divider />
+      <Box pb={4} height={500}>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  align="center"
+                  size="small"
+                  style={{ fontWeight: "bold" }}
+                >
+                  #
+                </TableCell>
+                <TableCell
+                  align="center"
+                  size="small"
+                  style={{ fontWeight: "bold" }}
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  align="center"
+                  size="small"
+                  style={{ fontWeight: "bold" }}
+                >
+                  Address
+                </TableCell>
+                <TableCell
+                  align="center"
+                  size="small"
+                  style={{ fontWeight: "bold" }}
+                >
+                  Phone
+                </TableCell>
+                <TableCell
+                  align="center"
+                  size="small"
+                  style={{ fontWeight: "bold" }}
+                >
+                  Email
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {clientData.map((row, index) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  hover={true}
+                >
+                  <TableCell align="center">{index}</TableCell>
+                  <TableCell align="center" o>
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.address_1}, {row.address_2}, {row.city}, {row.state}
+                  </TableCell>
+                  <TableCell align="center">{row.phone}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* <Button onClick={handleOpen}>Add Client</Button> */}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              New Client
+            </Typography>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Name"
+                  variant="standard"
+                  onChange={(e: any) =>
+                    setNewClient({
+                      ...newClient,
+                      name: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Address 1"
+                  variant="standard"
+                  onChange={(e: any) =>
+                    setNewClient({
+                      ...newClient,
+                      address_1: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Address 2"
+                  variant="standard"
+                  onChange={(e: any) =>
+                    setNewClient({
+                      ...newClient,
+                      address_2: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="City"
+                  variant="standard"
+                  onChange={(e: any) =>
+                    setNewClient({
+                      ...newClient,
+                      city: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              {/* <Grid item xs={12}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -191,24 +248,24 @@ export default function ClientTable() {
                 }
               />
             </Grid> */}
-            <Grid item xs={12}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel>State</InputLabel>
-                <Select
-                  variant="standard"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={newClient.state}
-                  label="State"
-                  onChange={handleStateChange}
-                >
-                  {states.map((state) => (
-                    <MenuItem value={state}>{state}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            {/* <Grid item xs={12}>
+              <Grid item xs={12}>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel>State</InputLabel>
+                  <Select
+                    variant="standard"
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={newClient.state}
+                    label="State"
+                    onChange={handleStateChange}
+                  >
+                    {states.map((state) => (
+                      <MenuItem value={state}>{state}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              {/* <Grid item xs={12}>
               <TextField
                 fullWidth
                 id="outlined-basic"
@@ -222,70 +279,71 @@ export default function ClientTable() {
                 }
               />
             </Grid> */}
-            <Grid item xs={12}>
-              <NumberFormat
-                variant="standard"
-                id="zipcode"
-                label="Zipcode"
-                fullWidth
-                value={newClient.zipcode}
-                customInput={TextField}
-                format="#####"
-                onChange={(e: any) =>
-                  setNewClient({ ...newClient, zipcode: e.target.value })
-                }
-              />
+              <Grid item xs={12}>
+                <NumberFormat
+                  variant="standard"
+                  id="zipcode"
+                  label="Zipcode"
+                  fullWidth
+                  value={newClient.zipcode}
+                  customInput={TextField}
+                  format="#####"
+                  onChange={(e: any) =>
+                    setNewClient({ ...newClient, zipcode: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <NumberFormat
+                  variant="standard"
+                  id="cc"
+                  label="Phone"
+                  fullWidth
+                  value={newClient.phone}
+                  customInput={TextField}
+                  format="(###)-###-####"
+                  onChange={(e: any) =>
+                    setNewClient({ ...newClient, phone: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Email"
+                  variant="standard"
+                  onChange={(e: any) =>
+                    setNewClient({
+                      ...newClient,
+                      client_email: e.target.value,
+                    })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button fullWidth variant="contained" onClick={onAddClient}>
+                  Add Client
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <NumberFormat
-                variant="standard"
-                id="cc"
-                label="Phone"
-                fullWidth
-                value={newClient.phone}
-                customInput={TextField}
-                format="(###)-###-####"
-                onChange={(e: any) =>
-                  setNewClient({ ...newClient, phone: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Email"
-                variant="standard"
-                onChange={(e: any) =>
-                  setNewClient({
-                    ...newClient,
-                    client_email: e.target.value,
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" onClick={onAddClient}>
-                Add Client
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
+          </Box>
+        </Modal>
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
           onClose={handleSnackClose}
-          severity="success"
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          Client Created Successfully
-        </Alert>
-      </Snackbar>
-    </Box>
+          <Alert
+            onClose={handleSnackClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Client Created Successfully
+          </Alert>
+        </Snackbar>
+      </Box>
+    </Paper>
   );
 }

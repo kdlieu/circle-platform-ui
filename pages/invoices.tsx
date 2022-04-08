@@ -1,3 +1,4 @@
+import { Divider } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import InvoicesTable from "../components/invoice/invoicesTable";
@@ -8,13 +9,15 @@ function Invoices({data} : any) {
     <div>
       <Paper>
         <Typography
-          variant="h4"
-          style={{ textAlign: "center" }}
+          variant="h5"
+          style={{ textAlign: "left" }}
           component="div"
-          pt={2}
+          py={2}
+          px={4}
         >
           Invoices Table
         </Typography>
+        <Divider/>
         <InvoicesTable rows={data} />
       </Paper>
     </div>

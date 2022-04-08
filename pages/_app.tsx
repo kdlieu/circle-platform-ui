@@ -4,6 +4,7 @@ import MainNav from "../components/layout/MainNav";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 import { useRouter } from "next/router";
+import { CssBaseline } from "@mui/material";
 
 // const theme = createTheme({
 //   palette: {
@@ -17,17 +18,19 @@ import { useRouter } from "next/router";
 // });
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+      mode: 'dark',
   },
 });
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const showHeader = router.pathname === '/pay/[id]' ? false : true;
+  const showHeader = (router.pathname === '/pay/[id]') || (router.pathname === '/pay/confirmation/[id]') ? false : true;
 
   console.log(router);
   return (
     <ThemeProvider theme={theme}>
-      {showHeader ? <MainNav mainPage={<Component {...pageProps} />} /> : <Component {...pageProps} />}
+      <CssBaseline/>
+      {/* {showHeader ? <MainNav mainPage={<Component {...pageProps} />} /> : <Component {...pageProps} />} */}
+      <MainNav showHeader={showHeader} mainPage={<Component {...pageProps} />}/>
 
     </ThemeProvider>
   );
