@@ -55,13 +55,13 @@ export default function InvoicePreview({ invoiceData }: any) {
   return (
     <Box px={4} py={2}>
       <Typography id="modal-modal-title" variant="h4" component="h2">
-        Invoice ID: {invoiceData.id}
+        Invoice ID: {invoiceData.invoice_id}
       </Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         <pre style={{ fontFamily: "inherit" }}>
-          {`${invoiceData.purchaserName}\n`}
-          {`${invoiceData.purchaserAddress}\n`}
-          {`${invoiceData.purchaserEmail}\n`}
+          {`${invoiceData.client_info.name}\n`}
+          {`${invoiceData.client_info.address_1}\n`}
+          {`${invoiceData.client_info.email}\n`}
         </pre>
       </Typography>
       <TableContainer>
@@ -76,7 +76,7 @@ export default function InvoicePreview({ invoiceData }: any) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {invoiceData.lineItems.map((row: any, index: any) => (
+            {invoiceData.line_items.map((row: any, index: any) => (
               <TableRow
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

@@ -4,13 +4,11 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import axios from "axios";
 import { useRouter } from "next/router";
 import InvoicePreview from "../../components/invoice/InvoicePreview";
-let data = require("/Users/khanglieu/Documents/circle-business-platform/test/invoicePreview.json"); //(with path)
 
 const Post = ({ data }: any) => {
-  const router = useRouter();
-  const { id } = router.query;
 
   return (
     <Container >
@@ -31,7 +29,10 @@ const Post = ({ data }: any) => {
 export default Post;
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+  // const router = useRouter();
+  // const { id } = router.query;
   // Fetch data from external API
   // const res = await fetch(`https://.../data`)
   // const data = await res.json()
@@ -46,6 +47,11 @@ export async function getServerSideProps() {
   //   },
   // });
   // const data = await res.json();
+  const res = await axios
+  .post("http://localhost:8000/invoice/search", {invoice_id: id})
 
-  return { props: { data } };
+  const data = await res.data[0]; 
+  console.log(data);
+  return { props: { data } }
+
 }
