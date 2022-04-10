@@ -54,7 +54,6 @@ export default function ClientTable() {
   useEffect(() => {
     axios.get("http://localhost:8000/client/all").then(({ data }) => {
       setClientData(data);
-      console.log(data);
     });
   }, [open]);
 
@@ -67,7 +66,6 @@ export default function ClientTable() {
   const onAddClient = () => {
     // TO-DO: POST call add client
     // TO-DO: Validation
-    console.log(newClient);
     axios
       .post("http://localhost:8000/client/create", {
         ...newClient,

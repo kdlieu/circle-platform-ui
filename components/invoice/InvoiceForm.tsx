@@ -23,45 +23,70 @@ let data = require("/Users/khanglieu/Documents/circle-business-platform/test/cli
 
 export default function InvoiceForm() {
   interface InvoiceData {
-    client_id: number;
-    pay_date: string;
+    invoice_id: number
+    client_id: number,
+    invoice_date: string,
     line_items: LineItem[];
-    total: number;
-    status: string;
-    
+    status: string,
+    pay_date: string,
+    total: number,
+    client_info: ClientInfo
   }
   interface LineItem {
-    name: string;
+    item: string;
     quantity: number;
-    rate: number;
+    price: number;
     total: number;
     key: number;
   }
-
-  const emptyLineItem = (): LineItem => ({
-    name: "",
-    quantity: 0,
-    rate: 0,
-    total: 0,
-    key: Math.random(),
-  });
+  
+  interface ClientInfo {
+    client_id: number,
+    name: string,
+    phone: string,
+    address_1: string, 
+    address_2: string,
+    city: string 
+    state: string,
+    zipcode: string,
+    email: string
+  }
   const emptyInvoice = (): InvoiceData => ({
-    line_items: [],
-    total: 0,
-    pay_date: "",
+    invoice_id: 0,
     client_id: 0,
-    status: "g"
+    invoice_date: "",
+    line_items: [],
+    status: "g",
+    pay_date: "",
+    total: 0,
+    client_info: emptyClient()
   });
+  
+  const emptyClient = (): ClientInfo => ({
+    client_id: 0,
+    name: "",
+    phone: "",
+    address_1: "",
+    address_2: "",
+    city: "",
+    state: "",
+    zipcode: "",
+    email: ""
+  });
+
+  
+  const emptyLineItem = (): LineItem => ({
+    item: "",
+    quantity: 0,
+    price: 0,
+    total: 0,
+    key: Math.random()
+  })
 
   const [clientList, setClientList] = useState([]);
   const [selectedClient, setSelectedClient] = useState({});
   const [invoice, setInvoice] = useState(emptyInvoice());
   const [open, setOpen] = useState(false);
-
-  // useEffect(() => {
-  //   console.log(data);
-  //   setClientList(data);
-  // }, []);
 
   useEffect(() => {
     axios.get("http://localhost:8000/client/all").then(({ data }) => {
@@ -90,7 +115,7 @@ export default function InvoiceForm() {
     let index = line_items.findIndex((obj: { key: number }) => obj.key === key);
     line_items[index][field] = event?.target.value;
     line_items[index]["total"] =
-      line_items[index]["quantity"] * line_items[index]["rate"];
+      line_items[index]["quantity"] * line_items[index]["price"];
     const total = line_items
       .map((item) => item.total)
       .reduce((prev, curr) => prev + curr, 0);
@@ -126,10 +151,10 @@ export default function InvoiceForm() {
     line_items = line_items.map((lineItem: LineItem) => ({
       ...lineItem,
       quantity: Number.parseFloat(lineItem.quantity),
-      rate: Number.parseFloat(lineItem.rate),
+      price: Number.parseFloat(lineItem.price),
     }));
     
-    const invoiceRequest = {...invoice, line_items: line_items, client_id: selectedClient.client_id};
+    const invoiceRequest = {...invoice, line_items: line_items, client_info: selectedClient, client_id: selectedClient.client_id};
 
     console.log(invoiceRequest)
     axios
@@ -208,7 +233,7 @@ export default function InvoiceForm() {
               style={{ textAlign: "center" }}
               component="div"
             >
-              Rate
+              Price
             </Typography>
           </Grid>
           <Grid item xs={2}>
@@ -242,7 +267,7 @@ export default function InvoiceForm() {
                   label="Item"
                   variant="outlined"
                   onChange={(e) =>
-                    handleLineItemChange(e, lineItem.key, "name")
+                    handleLineItemChange(e, lineItem.key, "item")
                   }
                 />
               </Grid>
@@ -263,11 +288,11 @@ export default function InvoiceForm() {
                 <TextField
                   fullWidth
                   id="outlined-basic"
-                  label="Rate"
+                  label="Price"
                   variant="outlined"
-                  value={lineItem.rate}
+                  value={lineItem.price}
                   onChange={(e) =>
-                    handleLineItemChange(e, lineItem.key, "rate")
+                    handleLineItemChange(e, lineItem.key, "price")
                   }
                 />
               </Grid>

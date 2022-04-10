@@ -35,7 +35,6 @@ export default function InvoicePreview({ invoiceData }: any) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(invoiceData);
 
   const [paymentInfo, setPaymentInfo] = useState({
     amount: "",

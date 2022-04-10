@@ -1,6 +1,7 @@
 import { Divider } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import InvoicesTable from "../components/invoice/invoicesTable";
 let data = require('/Users/khanglieu/Documents/circle-business-platform/test/invoiceRows.json'); //(with path)
 
@@ -42,6 +43,11 @@ export async function getServerSideProps() {
   //   },
   // });
   // const data = await res.json();
+
+  const res = await axios
+  .get("http://localhost:8000/invoice/all");
+
+const data = await res.data;
 
   return {props: {data}};
 }

@@ -98,7 +98,6 @@ const navLinks = [
 // }
 
 export default function MainNav(props) {
-  console.log(props);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />

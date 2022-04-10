@@ -51,7 +51,6 @@ export async function getServerSideProps(context) {
   .post("http://localhost:8000/invoice/search", {invoice_id: id})
 
   const data = await res.data[0]; 
-  console.log(data);
   return { props: { data } }
 
 }

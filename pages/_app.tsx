@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const showHeader = (router.pathname === '/pay/[id]') || (router.pathname === '/pay/confirmation/[id]') ? false : true;
 
-  console.log(router);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>

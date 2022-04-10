@@ -13,10 +13,12 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 
 const columns = [
-  { field: "id", headerName: "Invoice ID", width: 130 },
-  { field: "clientName", headerName: "Client Name", width: 170 },
-  { field: "invoiceDate", headerName: "Invoice Date", width: 170 },
+  { field: "invoice_id", headerName: "Invoice ID", width: 130 },
   { field: "status", headerName: "Status", width: 170 },
+  { field: "invoice_date", headerName: "Invoice Date", width: 170 },
+  { field: "total", headerName: "Total", width: 170, valueFormatter: (params) => {
+    return `$${params.value}`;
+  }},
 
   {
     field: "notify",
@@ -46,26 +48,57 @@ const columns = [
 ];
 
 interface InvoiceData {
-  purchaserName: string;
-  purchaserAddress: string;
-  purchaserEmail: string;
-  lineItems: LineItem[];
-  id: number;
+  invoice_id: number
+  client_id: number,
+  invoice_date: string,
+  line_items: LineItem[];
+  status: string,
+  pay_date: string,
+  total: number,
+  client_info: ClientInfo
 }
 interface LineItem {
-  name: string;
+  item: string;
   quantity: number;
-  rate: number;
+  price: number;
   total: number;
   key: number;
 }
+
+interface ClientInfo {
+  client_id: number,
+  name: string,
+  phone: string,
+  address_1: string, 
+  address_2: string,
+  city: string 
+  state: string,
+  zipcode: string,
+  email: string
+}
 const emptyInvoice = (): InvoiceData => ({
-  id: 0,
-  purchaserName: "",
-  purchaserAddress: "",
-  purchaserEmail: "",
-  lineItems: [],
+  invoice_id: 0,
+  client_id: 0,
+  invoice_date: "",
+  line_items: [],
+  status: "",
+  pay_date: "",
+  total: 0,
+  client_info: emptyClient()
 });
+
+const emptyClient = (): ClientInfo => ({
+  client_id: 0,
+  name: "",
+  phone: "",
+  address_1: "",
+  address_2: "",
+  city: "",
+  state: "",
+  zipcode: "",
+  email: ""
+});
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -77,37 +110,35 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function createData(name, quantity, rate, total) {
-    return { name, quantity, rate, total };
-  }
+// function createData(name, quantity, rate, total) {
+//     return { name, quantity, rate, total };
+//   }
   
-  const rows = [
-    createData('2x4 Plywood', 2, 20.0, 40.0),
-    createData('PVC Pipes', 10, 5.0, 50.0)
+//   const rows = [
+//     createData('2x4 Plywood', 2, 20.0, 40.0),
+//     createData('PVC Pipes', 10, 5.0, 50.0)
 
-  ];
+//   ];
 // TO-DO: Add data interface
 export default function InvoicesTable(data: any) {
   const [open, setOpen] = React.useState(false);
   const [curInvoice, setCurInvoice] = React.useState(emptyInvoice());
 
   const handleOpen = (e: any) => {
+    const row = e.row;
     // TO-DO: Fetch invoice by ID here
     setCurInvoice({
-      ...curInvoice,
-      purchaserName: "ACME",
-      purchaserAddress: "123 Main Street",
-      purchaserEmail: "ACME@acme.org",
+      ...row
     });
-    console.log(e);
+    console.log(row);
     setOpen(true);
   };
 
   const handleClose = () => setOpen(false);
-  console.log(data.rows);
   return (
     <Box px={4} py={4} height={400}>
       <DataGrid
+        getRowId={row => row.invoice_id}
         rows={data.rows}
         columns={columns}
         pageSize={5}
@@ -128,9 +159,13 @@ export default function InvoicesTable(data: any) {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <pre style={{ fontFamily: "inherit" }}>
-              {`${curInvoice.purchaserName}\n`}
-              {`${curInvoice.purchaserAddress}\n`}
-              {`${curInvoice.purchaserEmail}\n`}
+              {`Buyer:\n`}
+              {`${curInvoice.client_info.name}\n`}
+              {`${curInvoice.client_info.address_1}\n`}
+              {`${curInvoice.client_info.address_2 != null ? curInvoice.client_info.address_2 + '\n' : ""}`}
+              {`${curInvoice.client_info.city},${curInvoice.client_info.state},${curInvoice.client_info.zipcode}\n`}
+              {`${curInvoice.client_info.phone}\n`}
+              {`${curInvoice.client_info.email}\n`}
             </pre>
           </Typography>
           <TableContainer component={Paper}>
@@ -140,22 +175,22 @@ export default function InvoicesTable(data: any) {
                     <TableCell>#</TableCell>
                 <TableCell align="right">Name</TableCell>
                   <TableCell align="right">Quantity</TableCell>
-                  <TableCell align="right">Rate</TableCell>
+                  <TableCell align="right">Price</TableCell>
                   <TableCell align="right">Total</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row, index) => (
+                {curInvoice.line_items.map((row: LineItem, index: number) => (
                   <TableRow
-                    key={row.name}
+                    key={row.key}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
                       {index}
                     </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="right">{row.item}</TableCell>
                     <TableCell align="right">{row.quantity}</TableCell>
-                    <TableCell align="right">${row.rate}</TableCell>
+                    <TableCell align="right">${row.price}</TableCell>
                     <TableCell align="right">${row.total}</TableCell>
                   </TableRow>
                 ))}
