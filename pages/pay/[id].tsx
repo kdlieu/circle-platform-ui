@@ -48,9 +48,9 @@ export async function getServerSideProps(context) {
   // });
   // const data = await res.json();
   const res = await axios
-  .post("http://localhost:8000/invoice/search", {invoice_id: id})
+  .post("http://localhost:8000/invoice/search", {url: id})
 
-  const data = await res.data[0]; 
+  const data = await res.data[0];
   return { props: { data } }
 
 }

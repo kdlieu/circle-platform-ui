@@ -18,6 +18,7 @@
     "@mui/x-data-grid": "^5.8.0",
     "axios": "^0.26.1",
     "next": "12.1.4",
+    "openpgp": "^5.2.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-input-mask": "^3.0.0-alpha.2",
