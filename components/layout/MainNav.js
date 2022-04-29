@@ -23,6 +23,11 @@ import { MenuItem } from "@mui/material";
 import { Tooltip } from "@mui/material";
 import { IconButton } from "@mui/material";
 import { Avatar } from "@mui/material";
+import { useAuth } from "../../context/auth-context";
+import Modal from "@mui/material/Modal";
+import { TextField } from "@mui/material";
+import Router, { useRouter } from "next/router";
+import {ProtectedRoute} from "../ProtectedRoute"
 const drawerWidth = 240;
 
 const navLinks = [
@@ -31,73 +36,38 @@ const navLinks = [
   { text: "Client List", link: "/clients" },
 ];
 
-// export default function MainNav(props) {
-//   return (
-//     <Box sx={{ display: "flex" }}>
-//       <CssBaseline />
-//       <AppBar
-//         position="fixed"
-//         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-//       >
-//         <Toolbar>
-//           <Typography variant="h6" noWrap component="div">
-//             CircleBusiness
-//           </Typography>
-//           <Image src="/public/vercel.svg" width={30} height={30}/>
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
-//         </Toolbar>
 
-//       </AppBar>
-//       <Drawer
-//         sx={{
-//           width: drawerWidth,
-//           flexShrink: 0,
-//           "& .MuiDrawer-paper": {
-//             width: drawerWidth,
-//             boxSizing: "border-box",
-//           },
-//         }}
-//         variant="permanent"
-//         anchor="left"
-//       >
-//         <Toolbar />
-//         <Divider />
-//         <List>
-//           {navLinks.map((nav, index) => (
-//             <Link href={nav.link}>
-//               <ListItem button key={nav.text}>
-//                 <ListItemIcon>
-//                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-//                 </ListItemIcon>
-//                 <ListItemText primary={nav.text} />
-//               </ListItem>
-//             </Link>
-//           ))}
-//         </List>
-//         <Divider />
-//         {/* <List>
-//           {["All mail", "Trash", "Spam"].map((text, index) => (
-//             <ListItem button key={text}>
-//               <ListItemIcon>
-//                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-//               </ListItemIcon>
-//               <ListItemText primary={text} />
-//             </ListItem>
-//           ))}
-//         </List> */}
-//       </Drawer>
-//       <Box
-//         component="main"
-//         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-//       >
-//         <Toolbar />
-//         <Container>{props.mainPage}</Container>
-//       </Box>
-//     </Box>
-//   );
-// }
+
 
 export default function MainNav(props) {
+  const { isAuth, login, logout } = useAuth();
+  const isAuthenticated = isAuth();
+  const [loginOpen, setLoginOpen] = React.useState(false);
+  const handleLoginOpen = () => setLoginOpen(true);
+  const handleLoginClose = () => setLoginOpen(false);
+
+  const handleLogin = () => {
+    login();
+    setLoginOpen(false);
+    handleLoginClose();
+    props.router.push({
+      pathname: "/dashboard",
+      query: { returnUrl: props.router.asPath },
+    });
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -116,10 +86,11 @@ export default function MainNav(props) {
             </Typography>
           </Link>
 
-          {props.showHeader ? (
+          {props.showHeader && isAuthenticated ? (
             <>
               <Typography sx={{ minWidth: 100 }}>Balance</Typography>
               <Typography sx={{ minWidth: 100 }}>Profile</Typography>
+              <Button onClick={logout}>Logout</Button>
               <Tooltip title="Account settings">
                 <IconButton
                   size="small"
@@ -135,11 +106,13 @@ export default function MainNav(props) {
               </Tooltip>
             </>
           ) : (
-            <></>
+            <>
+              <Button onClick={handleLoginOpen}>Login</Button>
+            </>
           )}
         </Toolbar>
       </AppBar>
-      {props.showHeader ? (
+      {props.showHeader && isAuthenticated ? (
         <Drawer
           variant="permanent"
           sx={{
@@ -175,8 +148,45 @@ export default function MainNav(props) {
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
       >
         <Toolbar />
-        <Container>{props.mainPage}</Container>
+        <ProtectedRoute router={props.router}>
+          <Container>{props.mainPage}</Container>
+        </ProtectedRoute>
       </Box>
+      <Modal
+        open={loginOpen}
+        onClose={handleLoginClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+            Login
+          </Typography> */}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Username"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Password"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button fullWidth variant="contained" onClick={handleLogin}>
+                Login
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
     </Box>
   );
 }

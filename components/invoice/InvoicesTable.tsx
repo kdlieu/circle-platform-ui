@@ -171,7 +171,7 @@ export default function InvoicesTable(data: any) {
     axios
       .put("http://localhost:8000/admin/send_email", {
         email: rowData!.client_info!.email,
-        invoice_url: rowData.url,
+        invoice_url: "http://localhost:3000/" + rowData.url,
       })
       .then((res) => {
         setSnackOpen(true);
