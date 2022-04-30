@@ -176,6 +176,7 @@ export default function MainNav(props) {
                 fullWidth
                 id="outlined-basic"
                 label="Password"
+                type="password"
                 variant="outlined"
               />
             </Grid>

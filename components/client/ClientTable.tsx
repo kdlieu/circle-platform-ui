@@ -101,7 +101,10 @@ export default function ClientTable() {
       </Grid>
 
       <Divider />
-      <Box pb={4} height={500}>
+      <Box pb={4} height={500}       style={{
+        overflow: "hidden",
+        overflowY: "scroll" // added scroll
+      }}>
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -326,6 +329,7 @@ export default function ClientTable() {
               </Grid>
             </Grid>
           </Box>
+          
         </Modal>
         <Snackbar
           open={snackOpen}
@@ -342,6 +346,7 @@ export default function ClientTable() {
           </Alert>
         </Snackbar>
       </Box>
-    </Paper>
+      </Paper>
+
   );
 }

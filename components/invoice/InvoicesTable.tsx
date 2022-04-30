@@ -99,10 +99,20 @@ export default function InvoicesTable(data: any) {
   const columns = [
     { field: "invoice_id", headerName: "Invoice ID", width: 130 },
     {
+      field: "client_name",
+      headerName: "Name",
+      width: 200,
+      renderCell: (params) => {
+        console.log(params);
+        return `${params.row.client_info.name}`;
+      },
+    },
+    {
       field: "status",
       headerName: "Status",
       width: 170,
       renderCell: (params) => {
+        console.log(params);
         return `${statusMap[params.value]}`;
       },
     },

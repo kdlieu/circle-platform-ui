@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-export default function PaymentConfirmation(){
+export default function PaymentConfirmation(props){
 
-
+    console.log(props);
 
     return(
         <Box style={{textAlign:"center"}}>
@@ -16,7 +16,7 @@ export default function PaymentConfirmation(){
               Thank you, your payment has been successful. A confirmation email has been sent to 
           </Typography>
           <Typography variant="h6">
-              Your confirmation number is:
+              Your confirmation number is: {props.confirmationNumber}
           </Typography>
         </Box> 
     )

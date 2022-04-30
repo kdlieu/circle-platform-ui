@@ -19,18 +19,21 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import NumberFormat from "react-number-format";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import AdapterDateFns from "@mui/lab/AdapterDateFns"
+
 let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
 
 export default function InvoiceForm() {
   interface InvoiceData {
-    invoice_id: number
-    client_id: number,
-    invoice_date: string,
+    invoice_id: number;
+    client_id: number;
+    invoice_date: string;
     line_items: LineItem[];
-    status: string,
-    pay_date: string,
-    total: number,
-    client_info: ClientInfo
+    status: string;
+    pay_date: string;
+    total: number;
+    client_info: ClientInfo;
   }
   interface LineItem {
     item: string;
@@ -39,17 +42,17 @@ export default function InvoiceForm() {
     total: number;
     key: number;
   }
-  
+
   interface ClientInfo {
-    client_id: number,
-    name: string,
-    phone: string,
-    address_1: string, 
-    address_2: string,
-    city: string 
-    state: string,
-    zipcode: string,
-    email: string
+    client_id: number;
+    name: string;
+    phone: string;
+    address_1: string;
+    address_2: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    email: string;
   }
   const emptyInvoice = (): InvoiceData => ({
     invoice_id: 0,
@@ -59,9 +62,9 @@ export default function InvoiceForm() {
     status: "g",
     pay_date: "",
     total: 0,
-    client_info: emptyClient()
+    client_info: emptyClient(),
   });
-  
+
   const emptyClient = (): ClientInfo => ({
     client_id: 0,
     name: "",
@@ -71,17 +74,16 @@ export default function InvoiceForm() {
     city: "",
     state: "",
     zipcode: "",
-    email: ""
+    email: "",
   });
 
-  
   const emptyLineItem = (): LineItem => ({
     item: "",
     quantity: 0,
     price: 0,
     total: 0,
-    key: Math.random()
-  })
+    key: Math.random(),
+  });
 
   const [clientList, setClientList] = useState([]);
   const [selectedClient, setSelectedClient] = useState({});
@@ -153,10 +155,20 @@ export default function InvoiceForm() {
       quantity: Number.parseFloat(lineItem.quantity),
       price: Number.parseFloat(lineItem.price),
     }));
-    
-    const invoiceRequest = {...invoice, line_items: line_items, client_info: selectedClient, client_id: selectedClient.client_id};
 
-    console.log(invoiceRequest)
+    const offset = invoice.pay_date.getTimezoneOffset();
+    let payDateString = new Date(invoice.pay_date.getTime() - (offset*60*1000));
+    payDateString = payDateString.toISOString().split('T')[0];
+
+    const invoiceRequest = {
+      ...invoice,
+      line_items: line_items,
+      client_info: selectedClient,
+      pay_date: payDateString,
+      client_id: selectedClient.client_id
+    };
+
+    console.log(invoiceRequest);
     axios
       .post("http://localhost:8000/invoice/create", invoiceRequest)
       .then((res) => {
@@ -187,7 +199,7 @@ export default function InvoiceForm() {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <NumberFormat
+            {/* <NumberFormat
               variant="outlined"
               id="cc"
               label="Date"
@@ -198,7 +210,19 @@ export default function InvoiceForm() {
               onChange={(e: any) =>
                 setInvoice({ ...invoice, pay_date: e.target.value })
               }
-            />
+            /> */}
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                inputFormat="yyyy-MM-dd"
+
+                label="Due Date"
+                value={invoice.pay_date}
+                onChange={(e: any) => {
+                  setInvoice({ ...invoice, pay_date: e })
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid item xs={1}>
             <Typography

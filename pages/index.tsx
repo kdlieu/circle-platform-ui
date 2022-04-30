@@ -9,11 +9,19 @@ import styles from "../styles/Home.module.css";
 const Home: NextPage = () => {
   return (
     <Box>
-      <Grid container>
-        <Grid item xs={6}>
-          <Typography>Next Generation Business Payments</Typography>
+      <Grid container spacing={2}  alignItems="center" >
+        <Grid item xs={6} spacing={2}   alignItems="center" >
+          <Typography variant="h3">
+            New Generation of Business Payments
+          </Typography>
+          <Typography variant="h6">
+            Powered entirely by Circle and USDC
+          </Typography>
+          <Typography variant="subtitle1">
+            Powered entirely by Circle and USDC
+          </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} spacing={2}  >
           <Image src="/payments.svg" height={500} width={500}></Image>
         </Grid>
       </Grid>
