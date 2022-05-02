@@ -17,9 +17,7 @@ const Home: NextPage = () => {
           <Typography variant="h6">
             Powered entirely by Circle and USDC
           </Typography>
-          <Typography variant="subtitle1">
-            Powered entirely by Circle and USDC
-          </Typography>
+
         </Grid>
         <Grid item xs={6} spacing={2}  >
           <Image src="/payments.svg" height={500} width={500}></Image>

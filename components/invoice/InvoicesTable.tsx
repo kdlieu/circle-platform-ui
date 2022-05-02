@@ -91,7 +91,6 @@ const style = {
 //   ];
 // TO-DO: Add data interface
 export default function InvoicesTable(data: any) {
-  // console.log(data);
   const [open, setOpen] = React.useState(false);
   const [curInvoice, setCurInvoice] = React.useState(emptyInvoice());
   const [snackOpen, setSnackOpen] = React.useState(false);
@@ -103,7 +102,6 @@ export default function InvoicesTable(data: any) {
       headerName: "Name",
       width: 200,
       renderCell: (params) => {
-        console.log(params);
         return `${params.row.client_info.name}`;
       },
     },
@@ -112,7 +110,6 @@ export default function InvoicesTable(data: any) {
       headerName: "Status",
       width: 170,
       renderCell: (params) => {
-        console.log(params);
         return `${statusMap[params.value]}`;
       },
     },
@@ -171,17 +168,15 @@ export default function InvoicesTable(data: any) {
     setCurInvoice({
       ...row,
     });
-    console.log(row);
     setOpen(true);
   };
 
   const onNotify = (rowData: any): void => {
-    console.log(rowData);
 
     axios
       .put("http://localhost:8000/admin/send_email", {
         email: rowData!.client_info!.email,
-        invoice_url: "http://localhost:3000/" + rowData.url,
+        invoice_url: "http://localhost:3000/pay/" + rowData.url,
       })
       .then((res) => {
         setSnackOpen(true);

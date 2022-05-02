@@ -1,7 +1,55 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const priceData = [100,230,320,450,1200];
+const timeStamp = ["JAN", "FEB", "MAR", "APR", "MAY"];
+const data = {
+  labels: timeStamp,
+  datasets: [
+    {
+      label: "Revenue (USD) YTD (In hundred thousands)",
+      fill: false,
+      data: priceData,
+      backgroundColor: "#0071bd",
+      borderColor: "#0071bd",
+    },
+  ],
+};
+
+const options = {
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+  },
+};
 
 const Dashboard: NextPage = () => {
   return (
@@ -15,48 +63,17 @@ const Dashboard: NextPage = () => {
       <main className={styles.main}>
         <h1 className={styles.title}>
           {/* Welcome to <a href="https://nextjs.org">Next.js!</a> */}
-                    Welcome back, <a href="https://nextjs.org">Jollibee #517</a>
-
+          Welcome back, Jollibee #517
         </h1>
 
         <p className={styles.description}>
           It is currently {new Date().toString()}
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Graph 1 &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Graph 2</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Balances &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Notifications &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <Line data={data} options={options} />
       </main>
-
-    
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

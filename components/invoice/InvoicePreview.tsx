@@ -64,6 +64,7 @@ interface PaymentRequest {
   amount: string;
   currency: string;
   description: string;
+  invoice_id: string;
 }
 
 const emptyPaymentRequest = (): PaymentRequest => ({
@@ -91,7 +92,6 @@ const emptyEncryptedValue = (): EncryptedValue => ({
   keyId: "",
 });
 export default function InvoicePreview({ invoiceData }: any) {
-  console.log(invoiceData);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [publicKeyData, setPublicKeyData] = useState(emptyEncryptedValue);
@@ -141,12 +141,10 @@ export default function InvoicePreview({ invoiceData }: any) {
   }
 
   const onProcessPayment = async () => {
-    console.log(paymentInfo);
     const cardDetails: CardDetails = {
       number: paymentInfo.creditCard.replace(/ /g, ""),
       cvv: paymentInfo.cvv,
     };
-    console.log(cardDetails);
     encryptCardData(cardDetails).then((encrypted: EncryptedValue) => {
       const paymentRequest = buildPaymentRequest(encrypted);
       axios
@@ -155,7 +153,7 @@ export default function InvoicePreview({ invoiceData }: any) {
           // TO-DO - Add polling for confirmed here
           const confirmation_number = "10930-02329-923829";
           router.push({
-            pathname: `/pay/confirmation/${confirmation_number}`,
+            pathname: `/pay/confirmation/${invoiceData.url}`,
             query: { returnUrl: router.asPath },
           });
         });
@@ -167,10 +165,11 @@ export default function InvoicePreview({ invoiceData }: any) {
   ): PaymentRequest => {
     let paymentRequest: PaymentRequest = emptyPaymentRequest();
     paymentRequest.email = paymentInfo.email;
-    paymentRequest.phone = paymentInfo.phone;
+    paymentRequest.phone = "+14155555555";
+    paymentRequest.invoice_id = invoiceData.invoice_id;
     // TO-DO: Add sessionId generator and address_ip
     paymentRequest.session_id = "PLACEHOLDER";
-    paymentRequest.address_ip = "111.111.1.1";
+    paymentRequest.address_ip = "244.28.239.130";
     paymentRequest.name = paymentInfo.cardholderName;
     paymentRequest.address_1 = paymentInfo.addressLine1;
     paymentRequest.address_2 = paymentInfo.addressLine2;
@@ -262,7 +261,11 @@ export default function InvoicePreview({ invoiceData }: any) {
           </Button>
         </Grid>
         <Grid item xs={12} alignItems="center">
-              <Typography variant="body1">Invoice has been paid in full</Typography>
+          {invoiceData.status == "p" ? (
+            <Typography variant="body1">
+              Invoice has been paid in full
+            </Typography>
+          ) : null}
         </Grid>
       </Grid>
       <Modal

@@ -22,8 +22,6 @@ import NumberFormat from "react-number-format";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns"
 
-let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
-
 export default function InvoiceForm() {
   interface InvoiceData {
     invoice_id: number;
@@ -93,7 +91,6 @@ export default function InvoiceForm() {
   useEffect(() => {
     axios.get("http://localhost:8000/client/all").then(({ data }) => {
       setClientList(data);
-      console.log(data);
     });
   }, []);
   const onAddLineItem = (): void => {
@@ -144,7 +141,6 @@ export default function InvoiceForm() {
     setSelectedClient(event.target.value);
   };
   const onSave = () => {
-    console.log(invoice);
     // TO-DO: ADD REST LOGIC HERE
 
     // Convert Quantity and Rate to numbers
@@ -168,7 +164,6 @@ export default function InvoiceForm() {
       client_id: selectedClient.client_id
     };
 
-    console.log(invoiceRequest);
     axios
       .post("http://localhost:8000/invoice/create", invoiceRequest)
       .then((res) => {
