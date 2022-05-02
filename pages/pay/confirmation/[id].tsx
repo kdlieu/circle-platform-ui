@@ -7,7 +7,6 @@ import Paper from "@mui/material/Paper";
 import axios from "axios";
 import { useRouter } from "next/router";
 import PaymentConfirmation from "../../../components/payment/PaymentConfirmation";
-// let data = require("/Users/khanglieu/Documents/circle-business-platform/test/invoicePreview.json"); //(with path)
 
 const Post = ({ data }: any) => {
   // const router = useRouter();
