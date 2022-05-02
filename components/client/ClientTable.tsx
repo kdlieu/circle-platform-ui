@@ -13,8 +13,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import NumberFormat from "react-number-format";
-let data = require("/Users/khanglieu/Documents/circle-business-platform/test/clients.json"); //(with path)
-let states = require("/Users/khanglieu/Documents/circle-business-platform/static/states.json"); //(with path)
+let states = require("../../static/states.json"); //(with path)
 import fs from "fs";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
